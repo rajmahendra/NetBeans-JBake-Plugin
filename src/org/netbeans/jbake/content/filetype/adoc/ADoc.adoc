@@ -1,0 +1,7 @@
+= Project Structure
+${name}
+${date}
+:jbake-type: page
+:jbake-tags: ${name}
+:jbake-status: draft
+
