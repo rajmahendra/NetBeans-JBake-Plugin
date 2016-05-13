@@ -20,7 +20,7 @@ public class FreeMarkerProjectPanelVisual extends JPanel implements DocumentList
 
     public static final String PROP_PROJECT_NAME = "projectName";
 
-    private FreeMarkerProjectWizardPanel panel;
+    private final FreeMarkerProjectWizardPanel panel;
 
     public FreeMarkerProjectPanelVisual(FreeMarkerProjectWizardPanel panel) {
         initComponents();
@@ -112,7 +112,7 @@ public class FreeMarkerProjectPanelVisual extends JPanel implements DocumentList
         String command = evt.getActionCommand();
         if ("BROWSE".equals(command)) {
             JFileChooser chooser = new JFileChooser();
-            FileUtil.preventFileChooserSymlinkTraversal(chooser, null);
+            chooser.setCurrentDirectory(null);
             chooser.setDialogTitle("Select Project Location");
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             String path = this.projectLocationTextField.getText();
@@ -221,6 +221,7 @@ public class FreeMarkerProjectPanelVisual extends JPanel implements DocumentList
     }
 
     // Implementation of DocumentListener --------------------------------------
+    @Override
     public void changedUpdate(DocumentEvent e) {
         updateTexts(e);
         if (this.projectNameTextField.getDocument() == e.getDocument()) {
@@ -228,6 +229,7 @@ public class FreeMarkerProjectPanelVisual extends JPanel implements DocumentList
         }
     }
 
+    @Override
     public void insertUpdate(DocumentEvent e) {
         updateTexts(e);
         if (this.projectNameTextField.getDocument() == e.getDocument()) {
@@ -235,6 +237,7 @@ public class FreeMarkerProjectPanelVisual extends JPanel implements DocumentList
         }
     }
 
+    @Override
     public void removeUpdate(DocumentEvent e) {
         updateTexts(e);
         if (this.projectNameTextField.getDocument() == e.getDocument()) {

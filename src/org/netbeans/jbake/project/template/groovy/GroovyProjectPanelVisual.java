@@ -20,7 +20,7 @@ public class GroovyProjectPanelVisual extends JPanel implements DocumentListener
 
     public static final String PROP_PROJECT_NAME = "projectName";
 
-    private GroovyProjectWizardPanel panel;
+    private final GroovyProjectWizardPanel panel;
 
     public GroovyProjectPanelVisual(GroovyProjectWizardPanel panel) {
         initComponents();
@@ -112,7 +112,7 @@ public class GroovyProjectPanelVisual extends JPanel implements DocumentListener
         String command = evt.getActionCommand();
         if ("BROWSE".equals(command)) {
             JFileChooser chooser = new JFileChooser();
-            FileUtil.preventFileChooserSymlinkTraversal(chooser, null);
+            chooser.setCurrentDirectory(null);
             chooser.setDialogTitle("Select Project Location");
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             String path = this.projectLocationTextField.getText();

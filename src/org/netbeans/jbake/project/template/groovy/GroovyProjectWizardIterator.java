@@ -39,8 +39,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-// TODO define position attribute
-@TemplateRegistration(folder = "Project/JBake", displayName = "#GroovyProject_displayName", description = "GroovyProjectDescription.html", iconBase = "org/netbeans/jbake/project/template/groovy/GroovyProject.png", content = "GroovyProjectProject.zip")
+@TemplateRegistration(folder = "Project/JBake", displayName = "#GroovyProject_displayName", 
+        description = "GroovyProjectDescription.html", 
+        iconBase = "org/netbeans/jbake/project/template/groovy/GroovyProject.png", content = "GroovyProjectProject.zip")
 @Messages("GroovyProject_displayName=Groovy Project")
 public class GroovyProjectWizardIterator implements WizardDescriptor./*Progress*/InstantiatingIterator {
 

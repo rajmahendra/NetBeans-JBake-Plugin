@@ -32,10 +32,12 @@ import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.util.NbBundle.Messages;
 import org.openide.xml.XMLUtil;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 // TODO define position attribute
 @TemplateRegistration(folder = "Project/JBake", displayName = "#FreeMarkerProject_displayName", description = "FreeMarkerProjectDescription.html", iconBase = "org/netbeans/jbake/project/template/freemarker/FreeMarkerProject.png", content = "FreeMarkerProjectProject.zip")
@@ -64,8 +66,9 @@ public class FreeMarkerProjectWizardIterator implements WizardDescriptor./*Progr
         };
     }
 
+    @Override
     public Set/*<FileObject>*/ instantiate(/*ProgressHandle handle*/) throws IOException {
-        Set<FileObject> resultSet = new LinkedHashSet<FileObject>();
+        Set<FileObject> resultSet = new LinkedHashSet<>();
         File dirF = FileUtil.normalizeFile((File) wiz.getProperty("projdir"));
         dirF.mkdirs();
 
@@ -92,6 +95,7 @@ public class FreeMarkerProjectWizardIterator implements WizardDescriptor./*Progr
         return resultSet;
     }
 
+    @Override
     public void initialize(WizardDescriptor wiz) {
         this.wiz = wiz;
         index = 0;
@@ -110,13 +114,14 @@ public class FreeMarkerProjectWizardIterator implements WizardDescriptor./*Progr
                 JComponent jc = (JComponent) c;
                 // Step #.
                 // TODO if using org.openide.dialogs >= 7.8, can use WizardDescriptor.PROP_*:
-                jc.putClientProperty("WizardPanel_contentSelectedIndex", new Integer(i));
+                jc.putClientProperty("WizardPanel_contentSelectedIndex", i);
                 // Step name (actually the whole list for reference).
                 jc.putClientProperty("WizardPanel_contentData", steps);
             }
         }
     }
 
+    @Override
     public void uninitialize(WizardDescriptor wiz) {
         this.wiz.putProperty("projdir", null);
         this.wiz.putProperty("name", null);
@@ -124,19 +129,23 @@ public class FreeMarkerProjectWizardIterator implements WizardDescriptor./*Progr
         panels = null;
     }
 
+    @Override
     public String name() {
         return MessageFormat.format("{0} of {1}",
-                new Object[]{new Integer(index + 1), new Integer(panels.length)});
+                new Object[]{index + 1, panels.length});
     }
 
+    @Override
     public boolean hasNext() {
         return index < panels.length - 1;
     }
 
+    @Override
     public boolean hasPrevious() {
         return index > 0;
     }
 
+    @Override
     public void nextPanel() {
         if (!hasNext()) {
             throw new NoSuchElementException();
@@ -144,6 +153,7 @@ public class FreeMarkerProjectWizardIterator implements WizardDescriptor./*Progr
         index++;
     }
 
+    @Override
     public void previousPanel() {
         if (!hasPrevious()) {
             throw new NoSuchElementException();
@@ -151,14 +161,17 @@ public class FreeMarkerProjectWizardIterator implements WizardDescriptor./*Progr
         index--;
     }
 
+    @Override
     public WizardDescriptor.Panel current() {
         return panels[index];
     }
 
     // If nothing unusual changes in the middle of the wizard, simply:
+    @Override
     public final void addChangeListener(ChangeListener l) {
     }
 
+    @Override
     public final void removeChangeListener(ChangeListener l) {
     }
 
@@ -185,11 +198,8 @@ public class FreeMarkerProjectWizardIterator implements WizardDescriptor./*Progr
     }
 
     private static void writeFile(ZipInputStream str, FileObject fo) throws IOException {
-        OutputStream out = fo.getOutputStream();
-        try {
+        try (OutputStream out = fo.getOutputStream()) {
             FileUtil.copy(str, out);
-        } finally {
-            out.close();
         }
     }
 
@@ -211,13 +221,10 @@ public class FreeMarkerProjectWizardIterator implements WizardDescriptor./*Progr
                     }
                 }
             }
-            OutputStream out = fo.getOutputStream();
-            try {
+            try (OutputStream out = fo.getOutputStream()) {
                 XMLUtil.write(doc, out, "UTF-8");
-            } finally {
-                out.close();
             }
-        } catch (Exception ex) {
+        } catch (IOException | SAXException | DOMException ex) {
             Exceptions.printStackTrace(ex);
             writeFile(str, fo);
         }

@@ -5,15 +5,11 @@
  */
 package org.netbeans.jbake.projecttype.node;
 
-import java.awt.Image;
 import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.api.project.Project;
-import org.openide.filesystems.FileUtil;
-import org.openide.loaders.DataFolder;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.nodes.FilterNode;
-import org.openide.util.ImageUtilities;
 
 /**
  *

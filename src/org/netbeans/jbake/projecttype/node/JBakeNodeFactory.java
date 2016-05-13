@@ -23,7 +23,10 @@ public class JBakeNodeFactory implements NodeFactory {
     @Override
     public NodeList createNodes(Project project) {
         try {
-            return NodeFactorySupport.fixedNodeList(new AssetNode(project), new ContentNode(project), new TemplatesNode(project), new PropertyNode(project));
+            return NodeFactorySupport.fixedNodeList(new AssetNode(project),
+                    new ContentNode(project),
+                    new TemplatesNode(project),
+                    new PropertyNode(project));
         } catch (DataObjectNotFoundException ex) {
             Exceptions.printStackTrace(ex);
         }
